@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import CategoryCard from '@/components/CategoryCard.jsx';
 import BottomNav from '@/components/BottomNav.jsx';
-import pb from '@/lib/pocketbaseClient';
+import supabase from '@/lib/supabaseClient.js';
 import { toast } from 'sonner';
 
 const SignalementPage = () => {
@@ -36,53 +36,56 @@ const SignalementPage = () => {
     if (file) {
       setPhoto(file);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result);
-      };
+      reader.onloadend = () => setPhotoPreview(reader.result);
       reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = async () => {
     setLoading(true);
-
     try {
-      const formData = new FormData();
-      formData.append('userId', currentUser.id);
-      formData.append('categorie', selectedCategory);
-      formData.append('description', description);
-      formData.append('adresse', adresse);
-      formData.append('statut', 'Nouveau');
-      
-      // Generate reference
-      const refNumber = Math.floor(Math.random() * 900) + 100;
-      const ref = `#2025-${refNumber}`;
-      formData.append('reference', ref);
+      let photo_url = null;
 
+      // Upload photo if present
       if (photo) {
-        formData.append('photo', photo);
+        const ext = photo.name.split('.').pop();
+        const fileName = `${currentUser.id}-${Date.now()}.${ext}`;
+        const { error: uploadError } = await supabase.storage
+          .from('signalement-photos')
+          .upload(fileName, photo);
+        if (uploadError) throw uploadError;
+        const { data: urlData } = supabase.storage
+          .from('signalement-photos')
+          .getPublicUrl(fileName);
+        photo_url = urlData.publicUrl;
       }
 
-      const record = await pb.collection('signalements').create(formData, { $autoCancel: false });
-      
-      setReference(ref);
+      // Insert signalement
+      const { data, error } = await supabase.from('signalements').insert({
+        user_id: currentUser.id,
+        categorie: selectedCategory,
+        description,
+        adresse,
+        statut: 'Nouveau',
+        photo_url,
+      }).select().single();
+
+      if (error) throw error;
+
+      setReference(data.reference || `#${data.id.slice(0, 8).toUpperCase()}`);
       setSuccess(true);
       toast.success('Signalement envoyé');
     } catch (error) {
       console.error('Error creating signalement:', error);
       toast.error('Erreur lors de l\'envoi du signalement');
     }
-
     setLoading(false);
   };
 
   if (success) {
     return (
       <div className="min-h-screen flex items-center justify-center px-6" style={{ backgroundColor: '#1B2A6B' }}>
-        <Helmet>
-          <title>Signalement envoyé - Toulon & Vous</title>
-        </Helmet>
-
+        <Helmet><title>Signalement envoyé - Toulon & Vous</title></Helmet>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -98,11 +101,9 @@ const SignalementPage = () => {
           >
             <Check className="text-white" size={32} />
           </motion.div>
-
           <h1 className="text-white font-bold text-3xl mb-2">Signalement envoyé !</h1>
           <p className="text-white/70 text-lg mb-1">Référence : {reference}</p>
           <p className="text-white/60 text-sm mb-8">Vous recevrez un email de suivi</p>
-
           <button
             onClick={() => navigate('/accueil')}
             className="px-8 py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98"
@@ -117,11 +118,8 @@ const SignalementPage = () => {
 
   return (
     <div className="min-h-screen pb-20" style={{ backgroundColor: '#1B2A6B' }}>
-      <Helmet>
-        <title>Nouveau signalement - Toulon & Vous</title>
-      </Helmet>
+      <Helmet><title>Nouveau signalement - Toulon & Vous</title></Helmet>
 
-      {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: '#0F1E5C' }}>
         <div className="max-w-[430px] mx-auto px-4 py-4 flex items-center gap-3">
           <button onClick={() => navigate(-1)} className="text-white">
@@ -131,7 +129,6 @@ const SignalementPage = () => {
         </div>
       </div>
 
-      {/* Progress Bar */}
       <div className="fixed top-16 left-0 right-0 z-40" style={{ backgroundColor: '#0F1E5C' }}>
         <div className="max-w-[430px] mx-auto px-4 py-3">
           <div className="flex gap-2">
@@ -139,74 +136,33 @@ const SignalementPage = () => {
               <div
                 key={s}
                 className="h-1 flex-1 rounded-full transition-all duration-300"
-                style={{
-                  backgroundColor: s <= step ? '#2563EB' : 'rgba(255, 255, 255, 0.3)',
-                }}
+                style={{ backgroundColor: s <= step ? '#2563EB' : 'rgba(255, 255, 255, 0.3)' }}
               />
             ))}
           </div>
         </div>
       </div>
 
-      {/* Content */}
       <div className="max-w-[430px] mx-auto px-4 pt-28">
         <AnimatePresence mode="wait">
           {step === 1 && (
-            <motion.div
-              key="step1"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
+            <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }}>
               <h2 className="text-white font-bold text-2xl mb-6">Quel type de problème ?</h2>
               <div className="grid grid-cols-2 gap-3 mb-6">
                 {categories.map((cat) => (
-                  <CategoryCard
-                    key={cat.id}
-                    icon={cat.icon}
-                    label={cat.label}
-                    color={cat.color}
-                    selected={selectedCategory === cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
-                  />
+                  <CategoryCard key={cat.id} icon={cat.icon} label={cat.label} color={cat.color} selected={selectedCategory === cat.id} onClick={() => setSelectedCategory(cat.id)} />
                 ))}
               </div>
-              <button
-                onClick={() => setStep(2)}
-                disabled={!selectedCategory}
-                className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#2563EB' }}
-              >
-                Suivant
-              </button>
+              <button onClick={() => setStep(2)} disabled={!selectedCategory} className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed" style={{ backgroundColor: '#2563EB' }}>Suivant</button>
             </motion.div>
           )}
 
           {step === 2 && (
-            <motion.div
-              key="step2"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-4"
-            >
+            <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }} className="space-y-4">
               <div>
                 <label className="block text-white font-medium mb-2">Photo (optionnel)</label>
-                <label
-                  className="block rounded-2xl p-8 text-center cursor-pointer transition-all duration-200 hover:bg-white/15"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '2px dashed rgba(255, 255, 255, 0.3)',
-                  }}
-                >
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhotoChange}
-                    className="hidden"
-                  />
+                <label className="block rounded-2xl p-8 text-center cursor-pointer transition-all duration-200 hover:bg-white/15" style={{ background: 'rgba(255, 255, 255, 0.1)', border: '2px dashed rgba(255, 255, 255, 0.3)' }}>
+                  <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
                   {photoPreview ? (
                     <img src={photoPreview} alt="Preview" className="w-full h-40 object-cover rounded-xl" />
                   ) : (
@@ -217,105 +173,40 @@ const SignalementPage = () => {
                   )}
                 </label>
               </div>
-
               <div>
                 <label className="block text-white font-medium mb-2">Description</label>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Décrivez le problème..."
-                  rows={4}
-                  className="w-full rounded-xl py-3 px-4 text-white placeholder:text-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                  }}
-                />
+                <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Décrivez le problème..." rows={4} className="w-full rounded-xl py-3 px-4 text-white placeholder:text-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500" style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)' }} />
               </div>
-
               <div>
                 <label className="block text-white font-medium mb-2">Adresse</label>
-                <input
-                  type="text"
-                  value={adresse}
-                  onChange={(e) => setAdresse(e.target.value)}
-                  placeholder="Adresse du problème"
-                  className="w-full rounded-xl py-3 px-4 text-white placeholder:text-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                  }}
-                />
-                <button
-                  type="button"
-                  className="mt-2 text-blue-400 text-sm flex items-center gap-1 hover:text-blue-300 transition-colors duration-200"
-                >
-                  <MapPin size={16} />
-                  Ma position
+                <input type="text" value={adresse} onChange={(e) => setAdresse(e.target.value)} placeholder="Adresse du problème" className="w-full rounded-xl py-3 px-4 text-white placeholder:text-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500" style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)' }} />
+                <button type="button" className="mt-2 text-blue-400 text-sm flex items-center gap-1 hover:text-blue-300 transition-colors duration-200">
+                  <MapPin size={16} />Ma position
                 </button>
               </div>
-
-              <button
-                onClick={() => setStep(3)}
-                disabled={!description || !adresse}
-                className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#2563EB' }}
-              >
-                Suivant
-              </button>
+              <button onClick={() => setStep(3)} disabled={!description || !adresse} className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed" style={{ backgroundColor: '#2563EB' }}>Suivant</button>
             </motion.div>
           )}
 
           {step === 3 && (
-            <motion.div
-              key="step3"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
+            <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }}>
               <h2 className="text-white font-bold text-2xl mb-6">Vérifiez votre signalement</h2>
-              <div
-                className="rounded-2xl p-6 mb-6 space-y-4"
-                style={{ background: 'rgba(255, 255, 255, 0.1)' }}
-              >
-                <div>
-                  <p className="text-white/60 text-sm mb-1">Catégorie</p>
-                  <p className="text-white font-medium">{selectedCategory}</p>
-                </div>
+              <div className="rounded-2xl p-6 mb-6 space-y-4" style={{ background: 'rgba(255, 255, 255, 0.1)' }}>
+                <div><p className="text-white/60 text-sm mb-1">Catégorie</p><p className="text-white font-medium">{selectedCategory}</p></div>
                 {photoPreview && (
-                  <div>
-                    <p className="text-white/60 text-sm mb-2">Photo</p>
-                    <img src={photoPreview} alt="Preview" className="w-full h-32 object-cover rounded-xl" />
-                  </div>
+                  <div><p className="text-white/60 text-sm mb-2">Photo</p><img src={photoPreview} alt="Preview" className="w-full h-32 object-cover rounded-xl" /></div>
                 )}
-                <div>
-                  <p className="text-white/60 text-sm mb-1">Description</p>
-                  <p className="text-white">{description}</p>
-                </div>
-                <div>
-                  <p className="text-white/60 text-sm mb-1">Adresse</p>
-                  <p className="text-white">{adresse}</p>
-                </div>
+                <div><p className="text-white/60 text-sm mb-1">Description</p><p className="text-white">{description}</p></div>
+                <div><p className="text-white/60 text-sm mb-1">Adresse</p><p className="text-white">{adresse}</p></div>
               </div>
-
-              <button
-                onClick={handleSubmit}
-                disabled={loading}
-                className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#2563EB' }}
-              >
+              <button onClick={handleSubmit} disabled={loading} className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed" style={{ backgroundColor: '#2563EB' }}>
                 {loading ? 'Envoi...' : 'Envoyer'}
               </button>
-
-              <p className="text-white/60 text-sm text-center mt-4">
-                Votre mairie sera notifiée immédiatement
-              </p>
+              <p className="text-white/60 text-sm text-center mt-4">Votre mairie sera notifiée immédiatement</p>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-
       <BottomNav />
     </div>
   );
