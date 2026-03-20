@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import BottomNav from '@/components/BottomNav.jsx';
-import pb from '@/lib/pocketbaseClient';
+import supabase from '@/lib/supabaseClient';
 
 const ActualitesPage = () => {
   const [actualites, setActualites] = useState([]);
@@ -14,35 +14,35 @@ const ActualitesPage = () => {
 
   const fetchActualites = async () => {
     try {
-      const records = await pb.collection('actualites').getFullList({
-        sort: '-date',
-        $autoCancel: false,
-      });
-      setActualites(records);
+      const { data, error: sbError } = await supabase
+        .from('actualites')
+        .select('*')
+        .order('published_at', { ascending: false });
+      if (sbError) throw sbError;
+      setActualites(data || []);
     } catch (error) {
       console.error('Error fetching actualites:', error);
-      // Fallback to demo data if fetch fails
       setActualites([
         {
           id: '1',
           titre: 'Le marché du Cours Lafayette fête ses 200 ans',
           categorie: 'Culture',
-          date: '2026-03-18',
-          image: 'https://images.unsplash.com/photo-1499586579817-95cd48cf3edc',
+          published_at: '2026-03-18',
+          image_url: 'https://images.unsplash.com/photo-1499586579817-95cd48cf3edc',
         },
         {
           id: '2',
           titre: 'Nouveaux aménagements cyclables sur la rade',
           categorie: 'Mobilité',
-          date: '2026-03-15',
-          image: 'https://images.unsplash.com/photo-1597235664211-36a50607ca94',
+          published_at: '2026-03-15',
+          image_url: 'https://images.unsplash.com/photo-1597235664211-36a50607ca94',
         },
         {
           id: '3',
           titre: 'Ouverture de la piscine municipale de Bon-Rencontre',
           categorie: 'Sport',
-          date: '2026-03-10',
-          image: 'https://images.unsplash.com/photo-1615332164186-fafa9acc796d',
+          published_at: '2026-03-10',
+          image_url: 'https://images.unsplash.com/photo-1615332164186-fafa9acc796d',
         },
       ]);
     }
@@ -51,16 +51,11 @@ const ActualitesPage = () => {
 
   const getCategoryColor = (categorie) => {
     switch (categorie) {
-      case 'Culture':
-        return '#8B5CF6';
-      case 'Mobilité':
-        return '#3B82F6';
-      case 'Sport':
-        return '#F59E0B';
-      case 'Environnement':
-        return '#16A34A';
-      default:
-        return '#6B7280';
+      case 'Culture': return '#8B5CF6';
+      case 'Mobilité': return '#3B82F6';
+      case 'Sport': return '#F59E0B';
+      case 'Environnement': return '#16A34A';
+      default: return '#6B7280';
     }
   };
 
@@ -70,12 +65,7 @@ const ActualitesPage = () => {
   };
 
   const getImageUrl = (actualite) => {
-    if (actualite.image && actualite.image.startsWith('http')) {
-      return actualite.image;
-    }
-    if (actualite.image) {
-      return pb.files.getUrl(actualite, actualite.image);
-    }
+    if (actualite.image_url) return actualite.image_url;
     return 'https://images.unsplash.com/photo-1499586579817-95cd48cf3edc';
   };
 
@@ -85,15 +75,11 @@ const ActualitesPage = () => {
         <title>Actualités - Toulon & Vous</title>
         <meta name="description" content="Les dernières actualités de la Ville de Toulon" />
       </Helmet>
-
-      {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: '#0F1E5C' }}>
         <div className="max-w-[430px] mx-auto px-4 py-4">
           <h1 className="text-white font-bold text-xl">Actualités</h1>
         </div>
       </div>
-
-      {/* Content */}
       <div className="max-w-[430px] mx-auto px-4 pt-20">
         {loading ? (
           <div className="text-white text-center py-12">Chargement...</div>
@@ -122,14 +108,13 @@ const ActualitesPage = () => {
                   <h2 className="text-white font-bold text-lg mb-2 leading-tight">
                     {actualite.titre}
                   </h2>
-                  <p className="text-white/60 text-sm">{formatDate(actualite.date)}</p>
+                  <p className="text-white/60 text-sm">{formatDate(actualite.published_at)}</p>
                 </div>
               </motion.div>
             ))}
           </div>
         )}
       </div>
-
       <BottomNav />
     </div>
   );

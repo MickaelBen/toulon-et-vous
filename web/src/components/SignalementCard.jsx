@@ -2,31 +2,22 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import StatusBadge from './StatusBadge.jsx';
-import pb from '@/lib/pocketbaseClient';
 
 const SignalementCard = ({ signalement }) => {
   const navigate = useNavigate();
 
   const getCategoryColor = (categorie) => {
     switch (categorie) {
-      case 'Voirie':
-        return '#EF4444';
-      case 'Éclairage':
-        return '#F59E0B';
-      case 'Espaces verts':
-        return '#16A34A';
-      case 'Propreté':
-        return '#8B5CF6';
-      case 'Mobilier urbain':
-        return '#F97316';
-      default:
-        return '#6B7280';
+      case 'Voirie': return '#EF4444';
+      case 'Éclairage': return '#F59E0B';
+      case 'Espaces verts': return '#16A34A';
+      case 'Propreté': return '#8B5CF6';
+      case 'Mobilier urbain': return '#F97316';
+      default: return '#6B7280';
     }
   };
 
-  const photoUrl = signalement.photo
-    ? pb.files.getUrl(signalement, signalement.photo, { thumb: '100x100' })
-    : null;
+  const photoUrl = signalement.photo_url || null;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -62,7 +53,7 @@ const SignalementCard = ({ signalement }) => {
           <p className="text-white text-sm font-medium line-clamp-2 mb-1">
             {signalement.description}
           </p>
-          <p className="text-white/60 text-xs">{formatDate(signalement.created)}</p>
+          <p className="text-white/60 text-xs">{formatDate(signalement.created_at)}</p>
         </div>
       </div>
     </motion.button>
