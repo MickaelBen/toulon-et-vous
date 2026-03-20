@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Camera, MapPin, Check } from 'lucide-react';
+import { ArrowLeft, Camera, MapPin, Check, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import CategoryCard from '@/components/CategoryCard.jsx';
@@ -19,8 +19,10 @@ const SignalementPage = () => {
   const [description, setDescription] = useState('');
   const [adresse, setAdresse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [locating, setLocating] = useState(false);
   const [success, setSuccess] = useState(false);
   const [reference, setReference] = useState('');
+  const fileInputRef = useRef(null);
 
   const categories = [
     { id: 'Voirie', icon: 'Construction', label: 'Voirie', color: '#EF4444' },
@@ -41,12 +43,47 @@ const SignalementPage = () => {
     }
   };
 
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error('Géolocalisation non disponible sur cet appareil');
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&accept-language=fr`
+          );
+          const data = await res.json();
+          const addr = data.display_name || `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+          setAdresse(addr);
+          toast.success('Position récupérée');
+        } catch {
+          // Fallback: raw coordinates
+          setAdresse(`${latitude.toFixed(5)}, ${longitude.toFixed(5)}`);
+          toast.success('Position récupérée');
+        }
+        setLocating(false);
+      },
+      (err) => {
+        setLocating(false);
+        if (err.code === err.PERMISSION_DENIED) {
+          toast.error('Accès à la position refusé — autorisez la localisation dans les paramètres');
+        } else {
+          toast.error('Impossible de récupérer votre position');
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
       let photo_url = null;
 
-      // Upload photo if present
       if (photo) {
         const ext = photo.name.split('.').pop();
         const fileName = `${currentUser.id}-${Date.now()}.${ext}`;
@@ -60,7 +97,6 @@ const SignalementPage = () => {
         photo_url = urlData.publicUrl;
       }
 
-      // Insert signalement
       const { data, error } = await supabase.from('signalements').insert({
         user_id: currentUser.id,
         categorie: selectedCategory,
@@ -161,8 +197,21 @@ const SignalementPage = () => {
             <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }} className="space-y-4">
               <div>
                 <label className="block text-white font-medium mb-2">Photo (optionnel)</label>
-                <label className="block rounded-2xl p-8 text-center cursor-pointer transition-all duration-200 hover:bg-white/15" style={{ background: 'rgba(255, 255, 255, 0.1)', border: '2px dashed rgba(255, 255, 255, 0.3)' }}>
-                  <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
+                {/* input hidden — capture="environment" ouvre la caméra arrière sur mobile */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handlePhotoChange}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full rounded-2xl p-8 text-center transition-all duration-200 hover:bg-white/15"
+                  style={{ background: 'rgba(255, 255, 255, 0.1)', border: '2px dashed rgba(255, 255, 255, 0.3)' }}
+                >
                   {photoPreview ? (
                     <img src={photoPreview} alt="Preview" className="w-full h-40 object-cover rounded-xl" />
                   ) : (
@@ -171,7 +220,7 @@ const SignalementPage = () => {
                       <p className="text-white/60 text-sm">Appuyez pour ajouter une photo</p>
                     </>
                   )}
-                </label>
+                </button>
               </div>
               <div>
                 <label className="block text-white font-medium mb-2">Description</label>
@@ -180,8 +229,17 @@ const SignalementPage = () => {
               <div>
                 <label className="block text-white font-medium mb-2">Adresse</label>
                 <input type="text" value={adresse} onChange={(e) => setAdresse(e.target.value)} placeholder="Adresse du problème" className="w-full rounded-xl py-3 px-4 text-white placeholder:text-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500" style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)' }} />
-                <button type="button" className="mt-2 text-blue-400 text-sm flex items-center gap-1 hover:text-blue-300 transition-colors duration-200">
-                  <MapPin size={16} />Ma position
+                <button
+                  type="button"
+                  onClick={handleGetLocation}
+                  disabled={locating}
+                  className="mt-2 text-blue-400 text-sm flex items-center gap-1 hover:text-blue-300 transition-colors duration-200 disabled:opacity-50"
+                >
+                  {locating ? (
+                    <><Loader2 size={16} className="animate-spin" />Localisation...</>
+                  ) : (
+                    <><MapPin size={16} />Ma position</>
+                  )}
                 </button>
               </div>
               <button onClick={() => setStep(3)} disabled={!description || !adresse} className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed" style={{ backgroundColor: '#2563EB' }}>Suivant</button>
