@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import ScrollToTop from './components/ScrollToTop.jsx';
-import { AuthProvider } from './contexts/AuthContext.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import WelcomePage from './pages/WelcomePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
