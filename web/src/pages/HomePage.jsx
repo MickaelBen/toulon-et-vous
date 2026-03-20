@@ -1,0 +1,79 @@
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
+import { User } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext.jsx';
+import ServiceTile from '@/components/ServiceTile.jsx';
+import SearchBar from '@/components/SearchBar.jsx';
+import BottomNav from '@/components/BottomNav.jsx';
+
+const HomePage = () => {
+  const navigate = useNavigate();
+  const { currentUser } = useAuth();
+
+  const services = [
+    { icon: 'MapPin', label: 'Mon quartier', color: '#F97316' },
+    { icon: 'Leaf', label: 'Environnement', color: '#16A34A' },
+    { icon: 'FileText', label: 'Mes déclarations', color: '#3B82F6' },
+    { icon: 'Inbox', label: 'Mes demandes', color: '#8B5CF6' },
+    {
+      icon: 'AlertTriangle',
+      label: 'Signaler un problème',
+      color: '#EF4444',
+      subtitle: 'Voirie, éclairage, propreté...',
+      large: true,
+      onClick: () => navigate('/signaler'),
+    },
+    { icon: 'Calendar', label: 'Réunions publiques', color: '#F59E0B' },
+    { icon: 'HeartPulse', label: 'Où me soigner', color: '#EC4899' },
+    { icon: 'Newspaper', label: 'Actualités', color: '#06B6D4', onClick: () => navigate('/actualites') },
+    { icon: 'Landmark', label: 'Ma ville', color: '#6366F1' },
+  ];
+
+  return (
+    <div className="min-h-screen pb-20" style={{ backgroundColor: '#1B2A6B' }}>
+      <Helmet>
+        <title>Accueil - Toulon & Vous</title>
+        <meta name="description" content="Portail citoyen de la Ville de Toulon" />
+      </Helmet>
+
+      {/* Header */}
+      <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: '#0F1E5C' }}>
+        <div className="max-w-[430px] mx-auto px-4 py-4 flex items-center justify-between">
+          <h1 className="text-white font-bold text-xl">TOULON & VOUS</h1>
+          <button
+            className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-white/10"
+            style={{ border: '2px solid rgba(255, 255, 255, 0.2)' }}
+          >
+            <User className="text-white" size={20} />
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-[430px] mx-auto px-4 pt-20">
+        <div className="mb-6">
+          <SearchBar placeholder="Rechercher un service..." />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          {services.map((service, index) => (
+            <ServiceTile
+              key={index}
+              icon={service.icon}
+              label={service.label}
+              color={service.color}
+              subtitle={service.subtitle}
+              large={service.large}
+              onClick={service.onClick}
+            />
+          ))}
+        </div>
+      </div>
+
+      <BottomNav />
+    </div>
+  );
+};
+
+export default HomePage;
