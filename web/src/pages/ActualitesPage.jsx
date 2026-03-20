@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import BottomNav from '@/components/BottomNav.jsx';
-import supabase from '@/lib/supabaseClient';
+import supabase from '@/lib/supabaseClient.js';
 
 const ActualitesPage = () => {
   const [actualites, setActualites] = useState([]);
