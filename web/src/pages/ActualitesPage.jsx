@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import BottomNav from '@/components/BottomNav.jsx';
 import supabase from '@/lib/supabaseClient';
 import APP_CONFIG from '@/config/app.js';
 
 const ActualitesPage = () => {
+  const navigate = useNavigate();
   const [actualites, setActualites] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -97,12 +99,14 @@ const ActualitesPage = () => {
         ) : (
           <div className="space-y-4">
             {actualites.map((actualite, index) => (
-              <motion.div
+              <motion.button
                 key={actualite.id}
+                onClick={() => navigate(`/actualites/${actualite.id}`)}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
+                whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="rounded-2xl overflow-hidden transition-all duration-200 hover:scale-98"
+                className="w-full text-left rounded-2xl overflow-hidden transition-all duration-200"
                 style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}
               >
                 <div
@@ -121,7 +125,7 @@ const ActualitesPage = () => {
                   </h2>
                   <p className="text-sm" style={{ color: 'var(--text-sub)' }}>{formatDate(actualite.date)}</p>
                 </div>
-              </motion.div>
+              </motion.button>
             ))}
           </div>
         )}

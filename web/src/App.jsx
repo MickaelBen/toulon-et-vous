@@ -13,6 +13,7 @@ import SignalementPage from './pages/SignalementPage.jsx';
 import MesSignalementsPage from './pages/MesSignalementsPage.jsx';
 import SignalementDetailPage from './pages/SignalementDetailPage.jsx';
 import ActualitesPage from './pages/ActualitesPage.jsx';
+import ActualiteDetailPage from './pages/ActualiteDetailPage.jsx';
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
             }
           />
           <Route path="/actualites" element={<ActualitesPage />} />
+          <Route path="/actualites/:id" element={<ActualiteDetailPage />} />
           </Routes>
         </AuthProvider>
       </ThemeProvider>
