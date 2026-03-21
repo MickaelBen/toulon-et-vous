@@ -3,6 +3,7 @@ import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
+import { ThemeProvider } from './contexts/ThemeContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import WelcomePage from './pages/WelcomePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
@@ -16,10 +17,11 @@ import ActualitesPage from './pages/ActualitesPage.jsx';
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <ScrollToTop />
-        <Toaster position="top-center" richColors />
-        <Routes>
+      <ThemeProvider>
+        <AuthProvider>
+          <ScrollToTop />
+          <Toaster position="top-center" richColors />
+          <Routes>
           <Route path="/" element={<WelcomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -56,8 +58,9 @@ function App() {
             }
           />
           <Route path="/actualites" element={<ActualitesPage />} />
-        </Routes>
-      </AuthProvider>
+          </Routes>
+        </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 }

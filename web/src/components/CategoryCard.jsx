@@ -24,9 +24,9 @@ const CategoryCard = ({ icon, label, color, selected, onClick }) => {
         selected ? 'scale-105' : ''
       }`}
       style={{
-        background: selected ? '#EFF6FF' : '#FFFFFF',
-        border: selected ? '2px solid #3b82f6' : '2px solid #E5E7EB',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+        background: selected ? '#EFF6FF' : 'var(--bg-card)',
+        border: selected ? '2px solid #3b82f6' : '2px solid var(--border)',
+        boxShadow: 'var(--shadow)',
       }}
     >
       <div className="flex flex-col items-center gap-2">

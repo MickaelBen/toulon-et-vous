@@ -46,7 +46,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-12" style={{ backgroundColor: '#F5F7FF' }}>
+    <div className="min-h-screen flex items-center justify-center px-6 py-12" style={{ backgroundColor: 'var(--bg-page)' }}>
       <Helmet>
         <title>Créer un compte - {APP_CONFIG.appName}</title>
         <meta name="description" content={`Créez votre compte ${APP_CONFIG.appName}`} />
@@ -60,7 +60,7 @@ const RegisterPage = () => {
       >
         <div className="text-center mb-8">
           <Landmark className="mx-auto mb-4" style={{ color: '#1B2A6B' }} size={48} />
-          <h1 className="font-bold text-3xl mb-2" style={{ color: '#0D1B4A' }}>Créer mon compte</h1>
+          <h1 className="font-bold text-3xl mb-2" style={{ color: 'var(--text-main)' }}>Créer mon compte</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -74,9 +74,9 @@ const RegisterPage = () => {
               required
               className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #D1D5DB',
-                color: '#0D1B4A',
+                background: 'var(--input-bg)',
+                border: '1px solid var(--input-border)',
+                color: 'var(--text-main)',
               }}
             />
           </div>
@@ -91,9 +91,9 @@ const RegisterPage = () => {
               required
               className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #D1D5DB',
-                color: '#0D1B4A',
+                background: 'var(--input-bg)',
+                border: '1px solid var(--input-border)',
+                color: 'var(--text-main)',
               }}
             />
           </div>
@@ -108,9 +108,9 @@ const RegisterPage = () => {
               required
               className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #D1D5DB',
-                color: '#0D1B4A',
+                background: 'var(--input-bg)',
+                border: '1px solid var(--input-border)',
+                color: 'var(--text-main)',
               }}
             />
           </div>
@@ -126,9 +126,9 @@ const RegisterPage = () => {
               minLength={8}
               className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #D1D5DB',
-                color: '#0D1B4A',
+                background: 'var(--input-bg)',
+                border: '1px solid var(--input-border)',
+                color: 'var(--text-main)',
               }}
             />
           </div>
@@ -142,9 +142,9 @@ const RegisterPage = () => {
               onChange={handleChange}
               className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #D1D5DB',
-                color: '#0D1B4A',
+                background: 'var(--input-bg)',
+                border: '1px solid var(--input-border)',
+                color: 'var(--text-main)',
               }}
             />
           </div>
@@ -158,7 +158,7 @@ const RegisterPage = () => {
             {loading ? 'Création...' : 'Créer mon compte'}
           </button>
 
-          <p className="text-xs text-center mt-4" style={{ color: '#6B7280' }}>
+          <p className="text-xs text-center mt-4" style={{ color: 'var(--text-sub)' }}>
             En créant un compte, vous acceptez les conditions générales d'utilisation
           </p>
         </form>

@@ -124,7 +124,7 @@ const SignalementPage = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-6" style={{ backgroundColor: '#F5F7FF' }}>
+      <div className="min-h-screen flex items-center justify-center px-6" style={{ backgroundColor: 'var(--bg-page)' }}>
         <Helmet>
           <title>Signalement envoyé - {APP_CONFIG.appName}</title>
         </Helmet>
@@ -145,9 +145,9 @@ const SignalementPage = () => {
             <Check className="text-white" size={32} />
           </motion.div>
 
-          <h1 className="font-bold text-3xl mb-2" style={{ color: '#0D1B4A' }}>Signalement envoyé !</h1>
-          <p className="text-lg mb-1" style={{ color: '#6B7280' }}>Référence : {reference}</p>
-          <p className="text-sm mb-8" style={{ color: '#9CA3AF' }}>Vous recevrez un email de suivi</p>
+          <h1 className="font-bold text-3xl mb-2" style={{ color: 'var(--text-main)' }}>Signalement envoyé !</h1>
+          <p className="text-lg mb-1" style={{ color: 'var(--text-sub)' }}>Référence : {reference}</p>
+          <p className="text-sm mb-8" style={{ color: 'var(--text-muted)' }}>Vous recevrez un email de suivi</p>
 
           <button
             onClick={() => navigate('/accueil')}
@@ -162,23 +162,23 @@ const SignalementPage = () => {
   }
 
   return (
-    <div className="min-h-screen pb-20" style={{ backgroundColor: '#F5F7FF' }}>
+    <div className="min-h-screen pb-20" style={{ backgroundColor: 'var(--bg-page)' }}>
       <Helmet>
         <title>Nouveau signalement - {APP_CONFIG.appName}</title>
       </Helmet>
 
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E5E7EB' }}>
+      <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: 'var(--bg-header)', borderBottom: '1px solid var(--border)' }}>
         <div className="max-w-[430px] mx-auto px-4 py-4 flex items-center gap-3">
-          <button onClick={() => navigate(-1)} style={{ color: '#0D1B4A' }}>
+          <button onClick={() => navigate(-1)} style={{ color: 'var(--text-main)' }}>
             <ArrowLeft size={24} />
           </button>
-          <h1 className="font-bold text-xl" style={{ color: '#0D1B4A' }}>Nouveau signalement</h1>
+          <h1 className="font-bold text-xl" style={{ color: 'var(--text-main)' }}>Nouveau signalement</h1>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="fixed top-16 left-0 right-0 z-40" style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E5E7EB' }}>
+      <div className="fixed top-16 left-0 right-0 z-40" style={{ backgroundColor: 'var(--bg-header)', borderBottom: '1px solid var(--border)' }}>
         <div className="max-w-[430px] mx-auto px-4 py-3">
           <div className="flex gap-2">
             {[1, 2, 3].map((s) => (
@@ -205,7 +205,7 @@ const SignalementPage = () => {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="font-bold text-2xl mb-6" style={{ color: '#0D1B4A' }}>Quel type de problème ?</h2>
+              <h2 className="font-bold text-2xl mb-6" style={{ color: 'var(--text-main)' }}>Quel type de problème ?</h2>
               <div className="grid grid-cols-2 gap-3 mb-6">
                 {categories.map((cat) => (
                   <CategoryCard
@@ -239,12 +239,12 @@ const SignalementPage = () => {
               className="space-y-4"
             >
               <div>
-                <label className="block font-medium mb-2" style={{ color: '#0D1B4A' }}>Photo (optionnel)</label>
+                <label className="block font-medium mb-2" style={{ color: 'var(--text-main)' }}>Photo (optionnel)</label>
                 <label
                   className="block rounded-2xl p-8 text-center cursor-pointer transition-all duration-200 hover:bg-blue-50"
                   style={{
-                    background: '#F5F7FF',
-                    border: '2px dashed #D1D5DB',
+                    background: 'var(--bg-page)',
+                    border: '2px dashed var(--input-border)',
                   }}
                 >
                   <input
@@ -258,15 +258,15 @@ const SignalementPage = () => {
                     <img src={photoPreview} alt="Preview" className="w-full h-40 object-cover rounded-xl" />
                   ) : (
                     <>
-                      <Camera className="mx-auto mb-2" style={{ color: '#6B7280' }} size={32} />
-                      <p className="text-sm" style={{ color: '#6B7280' }}>Appuyez pour ajouter une photo</p>
+                      <Camera className="mx-auto mb-2" style={{ color: 'var(--text-sub)' }} size={32} />
+                      <p className="text-sm" style={{ color: 'var(--text-sub)' }}>Appuyez pour ajouter une photo</p>
                     </>
                   )}
                 </label>
               </div>
 
               <div>
-                <label className="block font-medium mb-2" style={{ color: '#0D1B4A' }}>Description</label>
+                <label className="block font-medium mb-2" style={{ color: 'var(--text-main)' }}>Description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -274,15 +274,15 @@ const SignalementPage = () => {
                   rows={4}
                   className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
                   style={{
-                    background: '#FFFFFF',
-                    border: '1px solid #D1D5DB',
-                    color: '#0D1B4A',
+                    background: 'var(--input-bg)',
+                    border: '1px solid var(--input-border)',
+                    color: 'var(--text-main)',
                   }}
                 />
               </div>
 
               <div>
-                <label className="block font-medium mb-2" style={{ color: '#0D1B4A' }}>Adresse</label>
+                <label className="block font-medium mb-2" style={{ color: 'var(--text-main)' }}>Adresse</label>
                 <input
                   type="text"
                   value={adresse}
@@ -290,9 +290,9 @@ const SignalementPage = () => {
                   placeholder="Adresse du problème"
                   className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
                   style={{
-                    background: '#FFFFFF',
-                    border: '1px solid #D1D5DB',
-                    color: '#0D1B4A',
+                    background: 'var(--input-bg)',
+                    border: '1px solid var(--input-border)',
+                    color: 'var(--text-main)',
                   }}
                 />
                 <button
@@ -325,28 +325,28 @@ const SignalementPage = () => {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="font-bold text-2xl mb-6" style={{ color: '#0D1B4A' }}>Vérifiez votre signalement</h2>
+              <h2 className="font-bold text-2xl mb-6" style={{ color: 'var(--text-main)' }}>Vérifiez votre signalement</h2>
               <div
                 className="rounded-2xl p-6 mb-6 space-y-4"
-                style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}
+                style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}
               >
                 <div>
-                  <p className="text-sm mb-1" style={{ color: '#6B7280' }}>Catégorie</p>
-                  <p className="font-medium" style={{ color: '#0D1B4A' }}>{selectedCategory}</p>
+                  <p className="text-sm mb-1" style={{ color: 'var(--text-sub)' }}>Catégorie</p>
+                  <p className="font-medium" style={{ color: 'var(--text-main)' }}>{selectedCategory}</p>
                 </div>
                 {photoPreview && (
                   <div>
-                    <p className="text-sm mb-2" style={{ color: '#6B7280' }}>Photo</p>
+                    <p className="text-sm mb-2" style={{ color: 'var(--text-sub)' }}>Photo</p>
                     <img src={photoPreview} alt="Preview" className="w-full h-32 object-cover rounded-xl" />
                   </div>
                 )}
                 <div>
-                  <p className="text-sm mb-1" style={{ color: '#6B7280' }}>Description</p>
-                  <p style={{ color: '#0D1B4A' }}>{description}</p>
+                  <p className="text-sm mb-1" style={{ color: 'var(--text-sub)' }}>Description</p>
+                  <p style={{ color: 'var(--text-main)' }}>{description}</p>
                 </div>
                 <div>
-                  <p className="text-sm mb-1" style={{ color: '#6B7280' }}>Adresse</p>
-                  <p style={{ color: '#0D1B4A' }}>{adresse}</p>
+                  <p className="text-sm mb-1" style={{ color: 'var(--text-sub)' }}>Adresse</p>
+                  <p style={{ color: 'var(--text-main)' }}>{adresse}</p>
                 </div>
               </div>
 
@@ -359,7 +359,7 @@ const SignalementPage = () => {
                 {loading ? 'Envoi...' : 'Envoyer le signalement'}
               </button>
 
-              <p className="text-sm text-center mt-4" style={{ color: '#6B7280' }}>
+              <p className="text-sm text-center mt-4" style={{ color: 'var(--text-sub)' }}>
                 Votre mairie sera notifiée immédiatement
               </p>
             </motion.div>

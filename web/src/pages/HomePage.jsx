@@ -1,9 +1,10 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
-import { User } from 'lucide-react';
+import { User, Sun, Moon } from 'lucide-react';
 import APP_CONFIG from '@/config/app.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
+import { useTheme } from '@/contexts/ThemeContext.jsx';
 import ServiceTile from '@/components/ServiceTile.jsx';
 import SearchBar from '@/components/SearchBar.jsx';
 import BottomNav from '@/components/BottomNav.jsx';
@@ -11,6 +12,7 @@ import BottomNav from '@/components/BottomNav.jsx';
 const HomePage = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
 
   const services = [
     { icon: 'MapPin', label: 'Mon quartier', color: '#F97316' },
@@ -32,22 +34,31 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-20" style={{ backgroundColor: '#F5F7FF' }}>
+    <div className="min-h-screen pb-20" style={{ backgroundColor: 'var(--bg-page)' }}>
       <Helmet>
         <title>Accueil - {APP_CONFIG.appName}</title>
         <meta name="description" content={APP_CONFIG.description} />
       </Helmet>
 
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E5E7EB' }}>
+      <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: 'var(--bg-header)', borderBottom: '1px solid var(--border)' }}>
         <div className="max-w-[430px] mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="font-bold text-xl" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#0D1B4A' }}>{APP_CONFIG.appName}</h1>
-          <button
-            className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-gray-100"
-            style={{ border: '2px solid #E5E7EB' }}
-          >
-            <User style={{ color: '#0D1B4A' }} size={20} />
-          </button>
+          <h1 className="font-bold text-xl" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: 'var(--text-main)' }}>{APP_CONFIG.appName}</h1>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-gray-100"
+              style={{ border: '2px solid var(--border)' }}
+            >
+              {isDark ? <Sun size={18} style={{ color: 'var(--text-main)' }} /> : <Moon size={18} style={{ color: 'var(--text-main)' }} />}
+            </button>
+            <button
+              className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-gray-100"
+              style={{ border: '2px solid var(--border)' }}
+            >
+              <User style={{ color: 'var(--text-main)' }} size={20} />
+            </button>
+          </div>
         </div>
       </div>
 
