@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import StatusBadge from '@/components/StatusBadge.jsx';
 import TimelineItem from '@/components/TimelineItem.jsx';
 import BottomNav from '@/components/BottomNav.jsx';
-import pb from '@/lib/pocketbaseClient';
+import supabase from '@/lib/supabaseClient';
 import APP_CONFIG from '@/config/app.js';
 
 const SignalementDetailPage = () => {
@@ -20,8 +20,13 @@ const SignalementDetailPage = () => {
 
   const fetchSignalement = async () => {
     try {
-      const record = await pb.collection('signalements').getOne(id, { $autoCancel: false });
-      setSignalement(record);
+      const { data, error } = await supabase
+        .from('signalements')
+        .select('*')
+        .eq('id', id)
+        .single();
+      if (error) throw error;
+      setSignalement(data);
     } catch (error) {
       console.error('Error fetching signalement:', error);
     }
@@ -44,9 +49,7 @@ const SignalementDetailPage = () => {
     );
   }
 
-  const photoUrl = signalement.photo
-    ? pb.files.getUrl(signalement, signalement.photo)
-    : null;
+  const photoUrl = signalement.photo_url || null;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -63,7 +66,7 @@ const SignalementDetailPage = () => {
     const items = [
       {
         status: 'Reçu',
-        date: formatDate(signalement.created),
+        date: formatDate(signalement.created_at),
         label: 'Reçu',
         color: '#3B82F6',
       },
@@ -72,7 +75,7 @@ const SignalementDetailPage = () => {
     if (signalement.statut === 'En cours' || signalement.statut === 'Résolu' || signalement.statut === 'Fermé') {
       items.push({
         status: 'En cours',
-        date: formatDate(signalement.updated),
+        date: formatDate(signalement.updated_at),
         label: 'Pris en charge',
         color: '#F59E0B',
       });
@@ -81,7 +84,7 @@ const SignalementDetailPage = () => {
     if (signalement.statut === 'Résolu' || signalement.statut === 'Fermé') {
       items.push({
         status: 'Résolu',
-        date: formatDate(signalement.updated),
+        date: formatDate(signalement.updated_at),
         label: 'Résolu',
         color: '#16A34A',
       });
@@ -138,7 +141,7 @@ const SignalementDetailPage = () => {
             </div>
             <div>
               <p className="text-white/60 text-sm mb-1">Date</p>
-              <p className="text-white">{formatDate(signalement.created)}</p>
+              <p className="text-white">{formatDate(signalement.created_at)}</p>
             </div>
           </div>
         </div>

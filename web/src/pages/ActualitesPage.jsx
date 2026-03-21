@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import BottomNav from '@/components/BottomNav.jsx';
-import pb from '@/lib/pocketbaseClient';
+import supabase from '@/lib/supabaseClient';
 import APP_CONFIG from '@/config/app.js';
 
 const ActualitesPage = () => {
@@ -15,11 +15,12 @@ const ActualitesPage = () => {
 
   const fetchActualites = async () => {
     try {
-      const records = await pb.collection('actualites').getFullList({
-        sort: '-date',
-        $autoCancel: false,
-      });
-      setActualites(records);
+      const { data, error } = await supabase
+        .from('actualites')
+        .select('*')
+        .order('published_at', { ascending: false });
+      if (error) throw error;
+      setActualites(data || []);
     } catch (error) {
       console.error('Error fetching actualites:', error);
       // Fallback to demo data if fetch fails
@@ -71,12 +72,7 @@ const ActualitesPage = () => {
   };
 
   const getImageUrl = (actualite) => {
-    if (actualite.image && actualite.image.startsWith('http')) {
-      return actualite.image;
-    }
-    if (actualite.image) {
-      return pb.files.getUrl(actualite, actualite.image);
-    }
+    if (actualite.image_url) return actualite.image_url;
     return 'https://images.unsplash.com/photo-1499586579817-95cd48cf3edc';
   };
 

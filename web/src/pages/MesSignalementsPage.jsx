@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import SignalementCard from '@/components/SignalementCard.jsx';
 import BottomNav from '@/components/BottomNav.jsx';
-import pb from '@/lib/pocketbaseClient';
+import supabase from '@/lib/supabaseClient';
 import { FileX } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import APP_CONFIG from '@/config/app.js';
@@ -23,12 +23,13 @@ const MesSignalementsPage = () => {
 
   const fetchSignalements = async () => {
     try {
-      const records = await pb.collection('signalements').getFullList({
-        filter: `userId = "${currentUser.id}"`,
-        sort: '-created',
-        $autoCancel: false,
-      });
-      setSignalements(records);
+      const { data, error } = await supabase
+        .from('signalements')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      setSignalements(data || []);
     } catch (error) {
       console.error('Error fetching signalements:', error);
     }

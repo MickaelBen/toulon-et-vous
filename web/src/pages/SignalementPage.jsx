@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import CategoryCard from '@/components/CategoryCard.jsx';
 import BottomNav from '@/components/BottomNav.jsx';
-import pb from '@/lib/pocketbaseClient';
+import supabase from '@/lib/supabaseClient';
 import { toast } from 'sonner';
 import APP_CONFIG from '@/config/app.js';
 
@@ -48,24 +48,35 @@ const SignalementPage = () => {
     setLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append('userId', currentUser.id);
-      formData.append('categorie', selectedCategory);
-      formData.append('description', description);
-      formData.append('adresse', adresse);
-      formData.append('statut', 'Nouveau');
-      
-      // Generate reference
       const refNumber = Math.floor(Math.random() * 900) + 100;
-      const ref = `#2025-${refNumber}`;
-      formData.append('reference', ref);
+      const ref = `#2026-${refNumber}`;
 
+      let photo_url = null;
       if (photo) {
-        formData.append('photo', photo);
+        const fileExt = photo.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const { error: uploadError } = await supabase.storage
+          .from('signalement-photos')
+          .upload(fileName, photo);
+        if (!uploadError) {
+          const { data: { publicUrl } } = supabase.storage
+            .from('signalement-photos')
+            .getPublicUrl(fileName);
+          photo_url = publicUrl;
+        }
       }
 
-      const record = await pb.collection('signalements').create(formData, { $autoCancel: false });
-      
+      const { error } = await supabase.from('signalements').insert({
+        user_id: currentUser.id,
+        categorie: selectedCategory,
+        description,
+        adresse,
+        statut: 'Nouveau',
+        reference: ref,
+        photo_url,
+      });
+      if (error) throw error;
+
       setReference(ref);
       setSuccess(true);
       toast.success('Signalement envoyé');
