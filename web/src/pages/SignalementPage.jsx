@@ -20,6 +20,7 @@ const SignalementPage = () => {
   const [description, setDescription] = useState('');
   const [adresse, setAdresse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [locating, setLocating] = useState(false);
   const [success, setSuccess] = useState(false);
   const [reference, setReference] = useState('');
 
@@ -31,6 +32,39 @@ const SignalementPage = () => {
     { id: 'Mobilier urbain', icon: 'Armchair', label: 'Mobilier urbain', color: '#F97316' },
     { id: 'Autre', icon: 'MoreHorizontal', label: 'Autre', color: '#6B7280' },
   ];
+
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error('La géolocalisation n\'est pas disponible sur cet appareil.');
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json&accept-language=fr`
+          );
+          const data = await res.json();
+          const addr = data.display_name || `${coords.latitude}, ${coords.longitude}`;
+          setAdresse(addr);
+          toast.success('Position récupérée');
+        } catch {
+          toast.error('Impossible de récupérer l\'adresse.');
+        }
+        setLocating(false);
+      },
+      (err) => {
+        setLocating(false);
+        if (err.code === err.PERMISSION_DENIED) {
+          toast.error('Permission de localisation refusée. Activez-la dans les paramètres de votre navigateur.');
+        } else {
+          toast.error('Impossible de récupérer votre position.');
+        }
+      },
+      { timeout: 10000 }
+    );
+  };
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
@@ -216,6 +250,7 @@ const SignalementPage = () => {
                   <input
                     type="file"
                     accept="image/*"
+                    capture="environment"
                     onChange={handlePhotoChange}
                     className="hidden"
                   />
@@ -260,10 +295,12 @@ const SignalementPage = () => {
                 />
                 <button
                   type="button"
-                  className="mt-2 text-blue-400 text-sm flex items-center gap-1 hover:text-blue-300 transition-colors duration-200"
+                  onClick={handleGetLocation}
+                  disabled={locating}
+                  className="mt-2 text-blue-400 text-sm flex items-center gap-1 hover:text-blue-300 transition-colors duration-200 disabled:opacity-50"
                 >
                   <MapPin size={16} />
-                  Ma position
+                  {locating ? 'Localisation...' : 'Ma position'}
                 </button>
               </div>
 
