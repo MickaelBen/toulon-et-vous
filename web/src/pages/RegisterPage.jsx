@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Landmark } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { toast } from 'sonner';
+import APP_CONFIG from '@/config/app.js';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -47,8 +48,8 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center px-6 py-12" style={{ backgroundColor: '#1B2A6B' }}>
       <Helmet>
-        <title>Créer un compte - Toulon & Vous</title>
-        <meta name="description" content="Créez votre compte Toulon & Vous" />
+        <title>Créer un compte - {APP_CONFIG.appName}</title>
+        <meta name="description" content={`Créez votre compte ${APP_CONFIG.appName}`} />
       </Helmet>
 
       <motion.div

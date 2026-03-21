@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import BottomNav from '@/components/BottomNav.jsx';
 import pb from '@/lib/pocketbaseClient';
+import APP_CONFIG from '@/config/app.js';
 
 const ActualitesPage = () => {
   const [actualites, setActualites] = useState([]);
@@ -82,8 +83,8 @@ const ActualitesPage = () => {
   return (
     <div className="min-h-screen pb-20" style={{ backgroundColor: '#1B2A6B' }}>
       <Helmet>
-        <title>Actualités - Toulon & Vous</title>
-        <meta name="description" content="Les dernières actualités de la Ville de Toulon" />
+        <title>Actualités - {APP_CONFIG.appName}</title>
+        <meta name="description" content={`Les dernières actualités de ${APP_CONFIG.commune}`} />
       </Helmet>
 
       {/* Header */}

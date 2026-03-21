@@ -6,6 +6,7 @@ import BottomNav from '@/components/BottomNav.jsx';
 import pb from '@/lib/pocketbaseClient';
 import { FileX } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import APP_CONFIG from '@/config/app.js';
 
 const MesSignalementsPage = () => {
   const { currentUser } = useAuth();
@@ -44,7 +45,7 @@ const MesSignalementsPage = () => {
   return (
     <div className="min-h-screen pb-20" style={{ backgroundColor: '#1B2A6B' }}>
       <Helmet>
-        <title>Mes signalements - Toulon & Vous</title>
+        <title>Mes signalements - {APP_CONFIG.appName}</title>
       </Helmet>
 
       {/* Header */}

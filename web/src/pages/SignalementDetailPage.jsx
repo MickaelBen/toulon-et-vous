@@ -6,6 +6,7 @@ import StatusBadge from '@/components/StatusBadge.jsx';
 import TimelineItem from '@/components/TimelineItem.jsx';
 import BottomNav from '@/components/BottomNav.jsx';
 import pb from '@/lib/pocketbaseClient';
+import APP_CONFIG from '@/config/app.js';
 
 const SignalementDetailPage = () => {
   const { id } = useParams();
@@ -92,7 +93,7 @@ const SignalementDetailPage = () => {
   return (
     <div className="min-h-screen pb-20" style={{ backgroundColor: '#1B2A6B' }}>
       <Helmet>
-        <title>{`Signalement ${signalement.reference || `#${signalement.id.slice(0, 6)}`} - Toulon & Vous`}</title>
+        <title>{`Signalement ${signalement.reference || `#${signalement.id.slice(0, 6)}`} - ${APP_CONFIG.appName}`}</title>
       </Helmet>
 
       {/* Header */}

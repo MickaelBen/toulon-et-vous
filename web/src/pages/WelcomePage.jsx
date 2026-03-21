@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Landmark } from 'lucide-react';
+import APP_CONFIG from '@/config/app.js';
 
 const WelcomePage = () => {
   const navigate = useNavigate();
@@ -10,8 +11,8 @@ const WelcomePage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center px-6" style={{ backgroundColor: '#1B2A6B' }}>
       <Helmet>
-        <title>Bienvenue - Toulon & Vous</title>
-        <meta name="description" content="Le portail citoyen de la Ville de Toulon" />
+        <title>Bienvenue - {APP_CONFIG.appName}</title>
+        <meta name="description" content={APP_CONFIG.description} />
       </Helmet>
 
       <motion.div
@@ -23,9 +24,9 @@ const WelcomePage = () => {
         <div className="mb-8">
           <Landmark className="text-white mx-auto mb-6" size={64} />
           <h1 className="text-white font-bold text-4xl mb-3" style={{ letterSpacing: '-0.02em' }}>
-            TOULON & VOUS
+            {APP_CONFIG.appName.toUpperCase()}
           </h1>
-          <p className="text-white/70 text-lg">Le portail citoyen de la Ville de Toulon</p>
+          <p className="text-white/70 text-lg">Le portail citoyen de {APP_CONFIG.commune}</p>
         </div>
 
         <div className="space-y-4">

@@ -8,6 +8,7 @@ import CategoryCard from '@/components/CategoryCard.jsx';
 import BottomNav from '@/components/BottomNav.jsx';
 import pb from '@/lib/pocketbaseClient';
 import { toast } from 'sonner';
+import APP_CONFIG from '@/config/app.js';
 
 const SignalementPage = () => {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ const SignalementPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center px-6" style={{ backgroundColor: '#1B2A6B' }}>
         <Helmet>
-          <title>Signalement envoyé - Toulon & Vous</title>
+          <title>Signalement envoyé - {APP_CONFIG.appName}</title>
         </Helmet>
 
         <motion.div
@@ -118,7 +119,7 @@ const SignalementPage = () => {
   return (
     <div className="min-h-screen pb-20" style={{ backgroundColor: '#1B2A6B' }}>
       <Helmet>
-        <title>Nouveau signalement - Toulon & Vous</title>
+        <title>Nouveau signalement - {APP_CONFIG.appName}</title>
       </Helmet>
 
       {/* Header */}
