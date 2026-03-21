@@ -77,23 +77,23 @@ const ActualitesPage = () => {
   };
 
   return (
-    <div className="min-h-screen pb-20" style={{ backgroundColor: '#1B2A6B' }}>
+    <div className="min-h-screen pb-20" style={{ backgroundColor: '#F5F7FF' }}>
       <Helmet>
         <title>Actualités - {APP_CONFIG.appName}</title>
         <meta name="description" content={`Les dernières actualités de ${APP_CONFIG.commune}`} />
       </Helmet>
 
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: '#0F1E5C' }}>
+      <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E5E7EB' }}>
         <div className="max-w-[430px] mx-auto px-4 py-4">
-          <h1 className="text-white font-bold text-xl">Actualités</h1>
+          <h1 className="font-bold text-xl" style={{ color: '#0D1B4A' }}>Actualités</h1>
         </div>
       </div>
 
       {/* Content */}
       <div className="max-w-[430px] mx-auto px-4 pt-20">
         {loading ? (
-          <div className="text-white text-center py-12">Chargement...</div>
+          <div className="text-center py-12" style={{ color: '#6B7280' }}>Chargement...</div>
         ) : (
           <div className="space-y-4">
             {actualites.map((actualite, index) => (
@@ -103,7 +103,7 @@ const ActualitesPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 className="rounded-2xl overflow-hidden transition-all duration-200 hover:scale-98"
-                style={{ background: 'rgba(255, 255, 255, 0.08)' }}
+                style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}
               >
                 <div
                   className="h-40 bg-cover bg-center"
@@ -116,10 +116,10 @@ const ActualitesPage = () => {
                   >
                     {actualite.categorie}
                   </span>
-                  <h2 className="text-white font-bold text-lg mb-2 leading-tight">
+                  <h2 className="font-bold text-lg mb-2 leading-tight" style={{ color: '#0D1B4A' }}>
                     {actualite.titre}
                   </h2>
-                  <p className="text-white/60 text-sm">{formatDate(actualite.date)}</p>
+                  <p className="text-sm" style={{ color: '#6B7280' }}>{formatDate(actualite.date)}</p>
                 </div>
               </motion.div>
             ))}

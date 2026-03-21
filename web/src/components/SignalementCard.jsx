@@ -36,7 +36,7 @@ const SignalementCard = ({ signalement }) => {
       whileTap={{ scale: 0.96 }}
       transition={{ duration: 0.2 }}
       className="w-full text-left rounded-2xl p-4 transition-all duration-200"
-      style={{ background: 'rgba(255, 255, 255, 0.08)' }}
+      style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}
     >
       <div className="flex gap-3">
         {photoUrl && (
@@ -55,10 +55,10 @@ const SignalementCard = ({ signalement }) => {
             </span>
             <StatusBadge status={signalement.statut || 'Nouveau'} small />
           </div>
-          <p className="text-white text-sm font-medium line-clamp-2 mb-1">
+          <p className="text-sm font-medium line-clamp-2 mb-1" style={{ color: '#0D1B4A' }}>
             {signalement.description}
           </p>
-          <p className="text-white/60 text-xs">{formatDate(signalement.created_at)}</p>
+          <p className="text-xs" style={{ color: '#6B7280' }}>{formatDate(signalement.created_at)}</p>
         </div>
       </div>
     </motion.button>

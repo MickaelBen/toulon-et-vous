@@ -32,21 +32,21 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-20" style={{ backgroundColor: '#1B2A6B' }}>
+    <div className="min-h-screen pb-20" style={{ backgroundColor: '#F5F7FF' }}>
       <Helmet>
         <title>Accueil - {APP_CONFIG.appName}</title>
         <meta name="description" content={APP_CONFIG.description} />
       </Helmet>
 
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: '#0F1E5C' }}>
+      <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E5E7EB' }}>
         <div className="max-w-[430px] mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-white font-bold text-xl" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{APP_CONFIG.appName}</h1>
+          <h1 className="font-bold text-xl" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", color: '#0D1B4A' }}>{APP_CONFIG.appName}</h1>
           <button
-            className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-white/10"
-            style={{ border: '2px solid rgba(255, 255, 255, 0.2)' }}
+            className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-gray-100"
+            style={{ border: '2px solid #E5E7EB' }}
           >
-            <User className="text-white" size={20} />
+            <User style={{ color: '#0D1B4A' }} size={20} />
           </button>
         </div>
       </div>

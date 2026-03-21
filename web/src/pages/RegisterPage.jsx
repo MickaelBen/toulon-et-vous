@@ -46,7 +46,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-12" style={{ backgroundColor: '#1B2A6B' }}>
+    <div className="min-h-screen flex items-center justify-center px-6 py-12" style={{ backgroundColor: '#F5F7FF' }}>
       <Helmet>
         <title>Créer un compte - {APP_CONFIG.appName}</title>
         <meta name="description" content={`Créez votre compte ${APP_CONFIG.appName}`} />
@@ -59,8 +59,8 @@ const RegisterPage = () => {
         className="w-full max-w-md"
       >
         <div className="text-center mb-8">
-          <Landmark className="text-white mx-auto mb-4" size={48} />
-          <h1 className="text-white font-bold text-3xl mb-2">Créer mon compte</h1>
+          <Landmark className="mx-auto mb-4" style={{ color: '#1B2A6B' }} size={48} />
+          <h1 className="font-bold text-3xl mb-2" style={{ color: '#0D1B4A' }}>Créer mon compte</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -72,10 +72,11 @@ const RegisterPage = () => {
               value={formData.prenom}
               onChange={handleChange}
               required
-              className="w-full rounded-xl py-3 px-4 text-white placeholder:text-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
               style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
+                background: '#FFFFFF',
+                border: '1px solid #D1D5DB',
+                color: '#0D1B4A',
               }}
             />
           </div>
@@ -88,10 +89,11 @@ const RegisterPage = () => {
               value={formData.nom}
               onChange={handleChange}
               required
-              className="w-full rounded-xl py-3 px-4 text-white placeholder:text-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
               style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
+                background: '#FFFFFF',
+                border: '1px solid #D1D5DB',
+                color: '#0D1B4A',
               }}
             />
           </div>
@@ -104,10 +106,11 @@ const RegisterPage = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full rounded-xl py-3 px-4 text-white placeholder:text-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
               style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
+                background: '#FFFFFF',
+                border: '1px solid #D1D5DB',
+                color: '#0D1B4A',
               }}
             />
           </div>
@@ -121,10 +124,11 @@ const RegisterPage = () => {
               onChange={handleChange}
               required
               minLength={8}
-              className="w-full rounded-xl py-3 px-4 text-white placeholder:text-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
               style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
+                background: '#FFFFFF',
+                border: '1px solid #D1D5DB',
+                color: '#0D1B4A',
               }}
             />
           </div>
@@ -136,10 +140,11 @@ const RegisterPage = () => {
               placeholder="Adresse (optionnel)"
               value={formData.adresse}
               onChange={handleChange}
-              className="w-full rounded-xl py-3 px-4 text-white placeholder:text-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
               style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
+                background: '#FFFFFF',
+                border: '1px solid #D1D5DB',
+                color: '#0D1B4A',
               }}
             />
           </div>
@@ -153,7 +158,7 @@ const RegisterPage = () => {
             {loading ? 'Création...' : 'Créer mon compte'}
           </button>
 
-          <p className="text-white/60 text-xs text-center mt-4">
+          <p className="text-xs text-center mt-4" style={{ color: '#6B7280' }}>
             En créant un compte, vous acceptez les conditions générales d'utilisation
           </p>
         </form>

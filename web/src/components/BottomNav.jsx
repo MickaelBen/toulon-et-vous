@@ -17,8 +17,8 @@ const BottomNav = () => {
     <div
       className="fixed bottom-0 left-0 right-0 z-50 border-t"
       style={{
-        backgroundColor: '#0F1E5C',
-        borderColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: '#FFFFFF',
+        borderColor: '#E5E7EB',
       }}
     >
       <div className="max-w-[430px] mx-auto">
@@ -33,7 +33,7 @@ const BottomNav = () => {
                 onClick={() => navigate(tab.path)}
                 className="flex flex-col items-center justify-center py-2 px-1 transition-all duration-200"
                 style={{
-                  color: isActive ? '#E8192C' : 'rgba(255, 255, 255, 0.6)',
+                  color: isActive ? '#E8192C' : '#6B7280',
                 }}
               >
                 <Icon size={22} />

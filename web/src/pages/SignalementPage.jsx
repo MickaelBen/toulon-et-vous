@@ -124,7 +124,7 @@ const SignalementPage = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-6" style={{ backgroundColor: '#1B2A6B' }}>
+      <div className="min-h-screen flex items-center justify-center px-6" style={{ backgroundColor: '#F5F7FF' }}>
         <Helmet>
           <title>Signalement envoyé - {APP_CONFIG.appName}</title>
         </Helmet>
@@ -145,14 +145,14 @@ const SignalementPage = () => {
             <Check className="text-white" size={32} />
           </motion.div>
 
-          <h1 className="text-white font-bold text-3xl mb-2">Signalement envoyé !</h1>
-          <p className="text-white/70 text-lg mb-1">Référence : {reference}</p>
-          <p className="text-white/60 text-sm mb-8">Vous recevrez un email de suivi</p>
+          <h1 className="font-bold text-3xl mb-2" style={{ color: '#0D1B4A' }}>Signalement envoyé !</h1>
+          <p className="text-lg mb-1" style={{ color: '#6B7280' }}>Référence : {reference}</p>
+          <p className="text-sm mb-8" style={{ color: '#9CA3AF' }}>Vous recevrez un email de suivi</p>
 
           <button
             onClick={() => navigate('/accueil')}
             className="px-8 py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98"
-            style={{ backgroundColor: '#E8192C' }}
+            style={{ backgroundColor: '#2563EB' }}
           >
             Retour à l'accueil
           </button>
@@ -162,23 +162,23 @@ const SignalementPage = () => {
   }
 
   return (
-    <div className="min-h-screen pb-20" style={{ backgroundColor: '#1B2A6B' }}>
+    <div className="min-h-screen pb-20" style={{ backgroundColor: '#F5F7FF' }}>
       <Helmet>
         <title>Nouveau signalement - {APP_CONFIG.appName}</title>
       </Helmet>
 
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: '#0F1E5C' }}>
+      <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E5E7EB' }}>
         <div className="max-w-[430px] mx-auto px-4 py-4 flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="text-white">
+          <button onClick={() => navigate(-1)} style={{ color: '#0D1B4A' }}>
             <ArrowLeft size={24} />
           </button>
-          <h1 className="text-white font-bold text-xl">Nouveau signalement</h1>
+          <h1 className="font-bold text-xl" style={{ color: '#0D1B4A' }}>Nouveau signalement</h1>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="fixed top-16 left-0 right-0 z-40" style={{ backgroundColor: '#0F1E5C' }}>
+      <div className="fixed top-16 left-0 right-0 z-40" style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E5E7EB' }}>
         <div className="max-w-[430px] mx-auto px-4 py-3">
           <div className="flex gap-2">
             {[1, 2, 3].map((s) => (
@@ -186,7 +186,7 @@ const SignalementPage = () => {
                 key={s}
                 className="h-1 flex-1 rounded-full transition-all duration-300"
                 style={{
-                  backgroundColor: s <= step ? '#E8192C' : 'rgba(255, 255, 255, 0.3)',
+                  backgroundColor: s <= step ? '#E8192C' : '#D1D5DB',
                 }}
               />
             ))}
@@ -205,7 +205,7 @@ const SignalementPage = () => {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="text-white font-bold text-2xl mb-6">Quel type de problème ?</h2>
+              <h2 className="font-bold text-2xl mb-6" style={{ color: '#0D1B4A' }}>Quel type de problème ?</h2>
               <div className="grid grid-cols-2 gap-3 mb-6">
                 {categories.map((cat) => (
                   <CategoryCard
@@ -222,7 +222,7 @@ const SignalementPage = () => {
                 onClick={() => setStep(2)}
                 disabled={!selectedCategory}
                 className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#E8192C' }}
+                style={{ backgroundColor: '#2563EB' }}
               >
                 Suivant
               </button>
@@ -239,12 +239,12 @@ const SignalementPage = () => {
               className="space-y-4"
             >
               <div>
-                <label className="block text-white font-medium mb-2">Photo (optionnel)</label>
+                <label className="block font-medium mb-2" style={{ color: '#0D1B4A' }}>Photo (optionnel)</label>
                 <label
-                  className="block rounded-2xl p-8 text-center cursor-pointer transition-all duration-200 hover:bg-white/15"
+                  className="block rounded-2xl p-8 text-center cursor-pointer transition-all duration-200 hover:bg-blue-50"
                   style={{
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '2px dashed rgba(255, 255, 255, 0.3)',
+                    background: '#F5F7FF',
+                    border: '2px dashed #D1D5DB',
                   }}
                 >
                   <input
@@ -258,39 +258,41 @@ const SignalementPage = () => {
                     <img src={photoPreview} alt="Preview" className="w-full h-40 object-cover rounded-xl" />
                   ) : (
                     <>
-                      <Camera className="text-white mx-auto mb-2" size={32} />
-                      <p className="text-white/60 text-sm">Appuyez pour ajouter une photo</p>
+                      <Camera className="mx-auto mb-2" style={{ color: '#6B7280' }} size={32} />
+                      <p className="text-sm" style={{ color: '#6B7280' }}>Appuyez pour ajouter une photo</p>
                     </>
                   )}
                 </label>
               </div>
 
               <div>
-                <label className="block text-white font-medium mb-2">Description</label>
+                <label className="block font-medium mb-2" style={{ color: '#0D1B4A' }}>Description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Décrivez le problème..."
                   rows={4}
-                  className="w-full rounded-xl py-3 px-4 text-white placeholder:text-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
                   style={{
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    background: '#FFFFFF',
+                    border: '1px solid #D1D5DB',
+                    color: '#0D1B4A',
                   }}
                 />
               </div>
 
               <div>
-                <label className="block text-white font-medium mb-2">Adresse</label>
+                <label className="block font-medium mb-2" style={{ color: '#0D1B4A' }}>Adresse</label>
                 <input
                   type="text"
                   value={adresse}
                   onChange={(e) => setAdresse(e.target.value)}
                   placeholder="Adresse du problème"
-                  className="w-full rounded-xl py-3 px-4 text-white placeholder:text-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full rounded-xl py-3 px-4 placeholder:text-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
                   style={{
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    background: '#FFFFFF',
+                    border: '1px solid #D1D5DB',
+                    color: '#0D1B4A',
                   }}
                 />
                 <button
@@ -308,7 +310,7 @@ const SignalementPage = () => {
                 onClick={() => setStep(3)}
                 disabled={!description || !adresse}
                 className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#E8192C' }}
+                style={{ backgroundColor: '#2563EB' }}
               >
                 Suivant
               </button>
@@ -323,28 +325,28 @@ const SignalementPage = () => {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="text-white font-bold text-2xl mb-6">Vérifiez votre signalement</h2>
+              <h2 className="font-bold text-2xl mb-6" style={{ color: '#0D1B4A' }}>Vérifiez votre signalement</h2>
               <div
                 className="rounded-2xl p-6 mb-6 space-y-4"
-                style={{ background: 'rgba(255, 255, 255, 0.1)' }}
+                style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}
               >
                 <div>
-                  <p className="text-white/60 text-sm mb-1">Catégorie</p>
-                  <p className="text-white font-medium">{selectedCategory}</p>
+                  <p className="text-sm mb-1" style={{ color: '#6B7280' }}>Catégorie</p>
+                  <p className="font-medium" style={{ color: '#0D1B4A' }}>{selectedCategory}</p>
                 </div>
                 {photoPreview && (
                   <div>
-                    <p className="text-white/60 text-sm mb-2">Photo</p>
+                    <p className="text-sm mb-2" style={{ color: '#6B7280' }}>Photo</p>
                     <img src={photoPreview} alt="Preview" className="w-full h-32 object-cover rounded-xl" />
                   </div>
                 )}
                 <div>
-                  <p className="text-white/60 text-sm mb-1">Description</p>
-                  <p className="text-white">{description}</p>
+                  <p className="text-sm mb-1" style={{ color: '#6B7280' }}>Description</p>
+                  <p style={{ color: '#0D1B4A' }}>{description}</p>
                 </div>
                 <div>
-                  <p className="text-white/60 text-sm mb-1">Adresse</p>
-                  <p className="text-white">{adresse}</p>
+                  <p className="text-sm mb-1" style={{ color: '#6B7280' }}>Adresse</p>
+                  <p style={{ color: '#0D1B4A' }}>{adresse}</p>
                 </div>
               </div>
 
@@ -354,10 +356,10 @@ const SignalementPage = () => {
                 className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ backgroundColor: '#E8192C' }}
               >
-                {loading ? 'Envoi...' : 'Envoyer'}
+                {loading ? 'Envoi...' : 'Envoyer le signalement'}
               </button>
 
-              <p className="text-white/60 text-sm text-center mt-4">
+              <p className="text-sm text-center mt-4" style={{ color: '#6B7280' }}>
                 Votre mairie sera notifiée immédiatement
               </p>
             </motion.div>
