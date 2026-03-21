@@ -27,8 +27,9 @@ const ServiceTile = ({ icon, label, color, subtitle, large, onClick }) => {
         large ? 'col-span-2' : ''
       }`}
       style={{
-        background: 'rgba(255, 255, 255, 0.08)',
-        backdropFilter: 'blur(10px)',
+        background: '#FFFFFF',
+        border: '1px solid #E5E7EB',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
       }}
     >
       <div className="flex items-center gap-3">
@@ -43,13 +44,13 @@ const ServiceTile = ({ icon, label, color, subtitle, large, onClick }) => {
           <IconComponent className="text-white" size={large ? 28 : 24} />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-white font-bold text-sm leading-tight">{label}</div>
+          <div className="font-bold text-sm leading-tight" style={{ color: '#3b82f6' }}>{label}</div>
           {subtitle && (
-            <div className="text-white/60 text-xs mt-1 leading-tight">{subtitle}</div>
+            <div className="text-xs mt-1 leading-tight" style={{ color: '#6B7280' }}>{subtitle}</div>
           )}
         </div>
         {large && (
-          <ArrowRight className="text-white/60 flex-shrink-0" size={20} />
+          <ArrowRight style={{ color: '#9CA3AF' }} className="flex-shrink-0" size={20} />
         )}
       </div>
     </motion.button>

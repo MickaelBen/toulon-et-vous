@@ -24,8 +24,9 @@ const CategoryCard = ({ icon, label, color, selected, onClick }) => {
         selected ? 'scale-105' : ''
       }`}
       style={{
-        background: selected ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.08)',
-        border: selected ? '2px solid white' : '2px solid transparent',
+        background: selected ? '#EFF6FF' : '#FFFFFF',
+        border: selected ? '2px solid #3b82f6' : '2px solid #E5E7EB',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
       }}
     >
       <div className="flex flex-col items-center gap-2">
@@ -39,7 +40,7 @@ const CategoryCard = ({ icon, label, color, selected, onClick }) => {
         >
           <IconComponent className="text-white" size={24} />
         </div>
-        <div className="text-white font-medium text-sm text-center">{label}</div>
+        <div className="font-medium text-sm text-center" style={{ color: '#3b82f6' }}>{label}</div>
       </div>
     </motion.button>
   );
