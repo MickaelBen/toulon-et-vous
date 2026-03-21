@@ -12,7 +12,6 @@ import SignalementPage from './pages/SignalementPage.jsx';
 import MesSignalementsPage from './pages/MesSignalementsPage.jsx';
 import SignalementDetailPage from './pages/SignalementDetailPage.jsx';
 import ActualitesPage from './pages/ActualitesPage.jsx';
-import ActualiteDetailPage from './pages/ActualiteDetailPage.jsx';
 
 function App() {
   return (
@@ -24,12 +23,39 @@ function App() {
           <Route path="/" element={<WelcomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/accueil" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-          <Route path="/signaler" element={<ProtectedRoute><SignalementPage /></ProtectedRoute>} />
-          <Route path="/mes-signalements" element={<ProtectedRoute><MesSignalementsPage /></ProtectedRoute>} />
-          <Route path="/signalement/:id" element={<ProtectedRoute><SignalementDetailPage /></ProtectedRoute>} />
+          <Route
+            path="/accueil"
+            element={
+              <ProtectedRoute>
+                <HomePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/signaler"
+            element={
+              <ProtectedRoute>
+                <SignalementPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mes-signalements"
+            element={
+              <ProtectedRoute>
+                <MesSignalementsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/signalement/:id"
+            element={
+              <ProtectedRoute>
+                <SignalementDetailPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/actualites" element={<ActualitesPage />} />
-          <Route path="/actualites/:id" element={<ActualiteDetailPage />} />
         </Routes>
       </AuthProvider>
     </Router>

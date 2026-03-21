@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import supabase from '@/lib/supabaseClient.js';
+import pb from '@/lib/pocketbaseClient';
 
 const AuthContext = createContext(null);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within AuthProvider');
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
   return context;
 };
 
@@ -14,36 +16,59 @@ export const AuthProvider = ({ children }) => {
   const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setCurrentUser(session?.user ?? null);
-      setInitialLoading(false);
+    // Check if user is already authenticated on mount
+    if (pb.authStore.isValid && pb.authStore.model) {
+      setCurrentUser(pb.authStore.model);
+    }
+    setInitialLoading(false);
+
+    // Listen for auth changes
+    const unsubscribe = pb.authStore.onChange((token, model) => {
+      setCurrentUser(model);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setCurrentUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const login = async (email, password) => {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) return { success: false, error: error.message };
-    return { success: true, user: data.user };
+    try {
+      const authData = await pb.collection('users').authWithPassword(email, password);
+      setCurrentUser(authData.record);
+      return { success: true, user: authData.record };
+    } catch (error) {
+      console.error('Login error:', error);
+      return { success: false, error: error.message || 'Échec de la connexion' };
+    }
   };
 
   const signup = async (prenom, nom, email, password, adresse) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { prenom, nom, adresse: adresse || '' } },
-    });
-    if (error) return { success: false, error: error.message };
-    return { success: true, user: data.user };
+    try {
+      const data = {
+        prenom,
+        nom,
+        email,
+        password,
+        passwordConfirm: password,
+        adresse: adresse || '',
+      };
+      
+      const record = await pb.collection('users').create(data, { $autoCancel: false });
+      
+      // Auto-login after signup
+      const authData = await pb.collection('users').authWithPassword(email, password);
+      setCurrentUser(authData.record);
+      
+      return { success: true, user: authData.record };
+    } catch (error) {
+      console.error('Signup error:', error);
+      return { success: false, error: error.message || 'Échec de la création du compte' };
+    }
   };
 
-  const logout = async () => {
-    await supabase.auth.signOut();
+  const logout = () => {
+    pb.authStore.clear();
     setCurrentUser(null);
   };
 
