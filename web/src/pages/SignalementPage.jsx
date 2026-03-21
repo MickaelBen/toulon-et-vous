@@ -152,7 +152,7 @@ const SignalementPage = () => {
           <button
             onClick={() => navigate('/accueil')}
             className="px-8 py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98"
-            style={{ backgroundColor: '#2563EB' }}
+            style={{ backgroundColor: '#E8192C' }}
           >
             Retour à l'accueil
           </button>
@@ -186,7 +186,7 @@ const SignalementPage = () => {
                 key={s}
                 className="h-1 flex-1 rounded-full transition-all duration-300"
                 style={{
-                  backgroundColor: s <= step ? '#2563EB' : 'rgba(255, 255, 255, 0.3)',
+                  backgroundColor: s <= step ? '#E8192C' : 'rgba(255, 255, 255, 0.3)',
                 }}
               />
             ))}
@@ -222,7 +222,7 @@ const SignalementPage = () => {
                 onClick={() => setStep(2)}
                 disabled={!selectedCategory}
                 className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#2563EB' }}
+                style={{ backgroundColor: '#E8192C' }}
               >
                 Suivant
               </button>
@@ -308,7 +308,7 @@ const SignalementPage = () => {
                 onClick={() => setStep(3)}
                 disabled={!description || !adresse}
                 className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#2563EB' }}
+                style={{ backgroundColor: '#E8192C' }}
               >
                 Suivant
               </button>
@@ -352,7 +352,7 @@ const SignalementPage = () => {
                 onClick={handleSubmit}
                 disabled={loading}
                 className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#2563EB' }}
+                style={{ backgroundColor: '#E8192C' }}
               >
                 {loading ? 'Envoi...' : 'Envoyer'}
               </button>

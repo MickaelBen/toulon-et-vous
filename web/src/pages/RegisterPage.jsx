@@ -148,7 +148,7 @@ const RegisterPage = () => {
             type="submit"
             disabled={loading}
             className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ backgroundColor: '#2563EB' }}
+            style={{ backgroundColor: '#E8192C' }}
           >
             {loading ? 'Création...' : 'Créer mon compte'}
           </button>

@@ -33,7 +33,7 @@ const BottomNav = () => {
                 onClick={() => navigate(tab.path)}
                 className="flex flex-col items-center justify-center py-2 px-1 transition-all duration-200"
                 style={{
-                  color: isActive ? '#2563EB' : 'rgba(255, 255, 255, 0.6)',
+                  color: isActive ? '#E8192C' : 'rgba(255, 255, 255, 0.6)',
                 }}
               >
                 <Icon size={22} />

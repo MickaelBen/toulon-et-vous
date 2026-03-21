@@ -23,8 +23,8 @@ const WelcomePage = () => {
       >
         <div className="mb-8">
           <Landmark className="text-white mx-auto mb-6" size={64} />
-          <h1 className="text-white font-bold text-4xl mb-3" style={{ letterSpacing: '-0.02em' }}>
-            {APP_CONFIG.appName.toUpperCase()}
+          <h1 className="text-white font-bold text-4xl mb-3" style={{ letterSpacing: '-0.02em', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            {APP_CONFIG.appName}
           </h1>
           <p className="text-white/70 text-lg">Le portail citoyen de {APP_CONFIG.commune}</p>
         </div>
@@ -33,7 +33,7 @@ const WelcomePage = () => {
           <button
             onClick={() => navigate('/accueil')}
             className="w-full py-4 rounded-2xl font-bold text-white text-lg transition-all duration-200 hover:brightness-110 active:scale-98"
-            style={{ backgroundColor: '#2563EB' }}
+            style={{ backgroundColor: '#E8192C' }}
           >
             Commencer
           </button>

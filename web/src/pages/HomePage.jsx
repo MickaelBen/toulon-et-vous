@@ -41,7 +41,7 @@ const HomePage = () => {
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-40" style={{ backgroundColor: '#0F1E5C' }}>
         <div className="max-w-[430px] mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-white font-bold text-xl">{APP_CONFIG.appName.toUpperCase()}</h1>
+          <h1 className="text-white font-bold text-xl" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{APP_CONFIG.appName}</h1>
           <button
             className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-white/10"
             style={{ border: '2px solid rgba(255, 255, 255, 0.2)' }}
