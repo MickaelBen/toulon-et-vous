@@ -59,7 +59,13 @@ const LoginPage = () => {
       toast.success('Connexion réussie');
       navigate('/accueil');
     } else {
-      toast.error(result.error);
+      console.error('Login failed:', result.error);
+      // Messages traduits selon l'erreur Supabase
+      let msg = result.error;
+      if (msg?.includes('Invalid login credentials'))  msg = 'Email ou mot de passe incorrect.';
+      if (msg?.includes('Email not confirmed'))        msg = 'Confirmez votre email avant de vous connecter.';
+      if (msg?.includes('Too many requests'))          msg = 'Trop de tentatives. Réessayez dans quelques minutes.';
+      toast.error(msg || 'Échec de la connexion.');
     }
     setLoading(false);
   };
