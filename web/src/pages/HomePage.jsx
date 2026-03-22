@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { User } from 'lucide-react';
+import { toast } from 'sonner';
 import APP_CONFIG from '@/config/app.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import ServiceTile from '@/components/ServiceTile.jsx';
@@ -14,11 +15,13 @@ const HomePage = () => {
   const { currentUser } = useAuth();
   const [profileOpen, setProfileOpen] = useState(false);
 
+  const soon = () => toast('Bientôt disponible', { icon: '🚧' });
+
   const services = [
-    { icon: 'MapPin', label: 'Mon quartier', color: '#F97316' },
-    { icon: 'Leaf', label: 'Environnement', color: '#16A34A' },
-    { icon: 'FileText', label: 'Mes déclarations', color: '#3B82F6' },
-    { icon: 'Inbox', label: 'Mes demandes', color: '#8B5CF6' },
+    { icon: 'MapPin', label: 'Mon quartier', color: '#F97316', onClick: soon },
+    { icon: 'Leaf', label: 'Environnement', color: '#16A34A', onClick: soon },
+    { icon: 'FileText', label: 'Mes déclarations', color: '#3B82F6', onClick: soon },
+    { icon: 'Inbox', label: 'Mes demandes', color: '#8B5CF6', onClick: () => navigate('/mes-signalements') },
     {
       icon: 'AlertTriangle',
       label: 'Signaler un problème',
@@ -27,10 +30,10 @@ const HomePage = () => {
       large: true,
       onClick: () => navigate('/signaler'),
     },
-    { icon: 'Calendar', label: 'Réunions publiques', color: '#F59E0B' },
-    { icon: 'HeartPulse', label: 'Où me soigner', color: '#EC4899' },
+    { icon: 'CalendarDays', label: 'Rendez-vous', color: '#0EA5E9', onClick: soon },
+    { icon: 'Calendar', label: 'Réunions publiques', color: '#F59E0B', onClick: soon },
     { icon: 'Newspaper', label: 'Actualités', color: '#06B6D4', onClick: () => navigate('/actualites') },
-    { icon: 'Landmark', label: 'Ma ville', color: '#6366F1' },
+    { icon: 'Landmark', label: 'Ma ville', color: '#6366F1', onClick: soon },
   ];
 
   return (
