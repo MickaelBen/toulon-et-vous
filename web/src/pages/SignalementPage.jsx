@@ -330,6 +330,7 @@ const SignalementPage = () => {
                     color: 'var(--text-main)',
                   }}
                 />
+                {/* Ma position + carte — masqué temporairement, code conservé
                 <button
                   type="button"
                   onClick={handleGetLocation}
@@ -364,6 +365,7 @@ const SignalementPage = () => {
                     </MapContainer>
                   </motion.div>
                 )}
+                */}
               </div>
 
               <button
