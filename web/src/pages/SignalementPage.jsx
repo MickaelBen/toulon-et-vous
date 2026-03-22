@@ -92,7 +92,7 @@ const SignalementPage = () => {
           toast.error('Impossible de récupérer votre position.');
         }
       },
-      { timeout: 10000 }
+      { timeout: 5000, enableHighAccuracy: false, maximumAge: 30000 }
     );
   };
 
