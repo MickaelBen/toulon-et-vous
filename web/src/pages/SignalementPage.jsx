@@ -330,7 +330,6 @@ const SignalementPage = () => {
                     color: 'var(--text-main)',
                   }}
                 />
-                {/* Ma position + carte — masqué temporairement, code conservé
                 <button
                   type="button"
                   onClick={handleGetLocation}
@@ -342,6 +341,7 @@ const SignalementPage = () => {
                   {locating ? 'Localisation...' : 'Ma position'}
                 </button>
 
+                {/* Carte Leaflet — masquée temporairement, code conservé
                 {mapCoords && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
