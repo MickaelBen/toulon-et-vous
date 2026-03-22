@@ -3,12 +3,36 @@ import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Camera, MapPin, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import CategoryCard from '@/components/CategoryCard.jsx';
 import BottomNav from '@/components/BottomNav.jsx';
 import supabase from '@/lib/supabaseClient';
 import { toast } from 'sonner';
 import APP_CONFIG from '@/config/app.js';
+
+// Fix icône Leaflet manquante en production Vite
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+});
+
+// Marker draggable : quand on déplace le pin → re-geocode l'adresse
+const DraggableMarker = ({ position, onMove }) => {
+  useMapEvents({});
+  return (
+    <Marker
+      position={position}
+      draggable
+      eventHandlers={{
+        dragend: (e) => onMove(e.target.getLatLng()),
+      }}
+    />
+  );
+};
 
 const SignalementPage = () => {
   const navigate = useNavigate();
@@ -23,6 +47,7 @@ const SignalementPage = () => {
   const [locating, setLocating] = useState(false);
   const [success, setSuccess] = useState(false);
   const [reference, setReference] = useState('');
+  const [mapCoords, setMapCoords] = useState(null);
 
   const categories = [
     { id: 'Voirie', icon: 'Construction', label: 'Voirie', color: '#EF4444' },
@@ -33,6 +58,18 @@ const SignalementPage = () => {
     { id: 'Autre', icon: 'MoreHorizontal', label: 'Autre', color: '#6B7280' },
   ];
 
+  const reverseGeocode = async (lat, lng) => {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=fr`
+      );
+      const data = await res.json();
+      setAdresse(data.display_name || `${lat.toFixed(5)}, ${lng.toFixed(5)}`);
+    } catch {
+      toast.error('Impossible de récupérer l\'adresse.');
+    }
+  };
+
   const handleGetLocation = () => {
     if (!navigator.geolocation) {
       toast.error('La géolocalisation n\'est pas disponible sur cet appareil.');
@@ -41,17 +78,10 @@ const SignalementPage = () => {
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
-        try {
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json&accept-language=fr`
-          );
-          const data = await res.json();
-          const addr = data.display_name || `${coords.latitude}, ${coords.longitude}`;
-          setAdresse(addr);
-          toast.success('Position récupérée');
-        } catch {
-          toast.error('Impossible de récupérer l\'adresse.');
-        }
+        const { latitude: lat, longitude: lng } = coords;
+        setMapCoords({ lat, lng });
+        await reverseGeocode(lat, lng);
+        toast.success('Position récupérée');
         setLocating(false);
       },
       (err) => {
@@ -64,6 +94,11 @@ const SignalementPage = () => {
       },
       { timeout: 10000 }
     );
+  };
+
+  const handleMarkerMove = async ({ lat, lng }) => {
+    setMapCoords({ lat, lng });
+    await reverseGeocode(lat, lng);
   };
 
   const handlePhotoChange = (e) => {
@@ -299,11 +334,36 @@ const SignalementPage = () => {
                   type="button"
                   onClick={handleGetLocation}
                   disabled={locating}
-                  className="mt-2 text-blue-400 text-sm flex items-center gap-1 hover:text-blue-300 transition-colors duration-200 disabled:opacity-50"
+                  className="mt-2 text-sm flex items-center gap-1 transition-colors duration-200 disabled:opacity-50"
+                  style={{ color: '#2563EB' }}
                 >
                   <MapPin size={16} />
                   {locating ? 'Localisation...' : 'Ma position'}
                 </button>
+
+                {mapCoords && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 180 }}
+                    transition={{ duration: 0.3 }}
+                    className="mt-3 rounded-xl overflow-hidden"
+                    style={{ border: '1px solid var(--border)' }}
+                  >
+                    <MapContainer
+                      center={[mapCoords.lat, mapCoords.lng]}
+                      zoom={16}
+                      style={{ height: '180px', width: '100%' }}
+                      zoomControl={false}
+                      attributionControl={false}
+                    >
+                      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                      <DraggableMarker
+                        position={[mapCoords.lat, mapCoords.lng]}
+                        onMove={handleMarkerMove}
+                      />
+                    </MapContainer>
+                  </motion.div>
+                )}
               </div>
 
               <button
